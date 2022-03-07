@@ -1,0 +1,46 @@
+1) Install python3 and the needed libraries: open Terminal window and run the following commands in a row:
+sudo apt-get install python3-pip
+sudo pip3 install --upgrade setuptools
+sudo pip3 install --upgrade adafruit-python-shell
+wget https://raw.githubusercontent.com/adafruit/Raspberry-Pi-Installer-Scripts/master/raspi-blinka.py
+sudo python3 raspi-blinka.py
+# Hit yes to any prompts which may come up and yes (Y) to reboot at the end. -> During this command if you got an error then please do the step 0) below then redo this command
+
+# Then run the following commands in Terminal window in a row:
+sudo i2cdetect -y 1
+# You should then see a table, which has a single set of characters in it (typically 3c for these displays). This code indicates the I2C address of your display.
+sudo pip3 install adafruit-circuitpython-ssd1306
+sudo apt-get install python3-pil
+git clone https://github.com/Broodie/rpi_oled_display_stat.git
+
+2) Make it running at startup - run the following command in Terminal window:
+sudo nano /lib/systemd/system/oled_display.service
+
+# This creates a file called oled_display.service. The content of this file should be the following:
+[Unit]
+Description=OLED display
+After=multi-user.target
+[Service]
+Type=simple
+User=pi
+Group=pi
+ExecStart=/usr/bin/python3 /home/pi/rpi_oled_display_stat/display_stats.py
+[Install]
+WantedBy=multi-user.target
+
+# Then run the following commands in Terminal window in a row:
+sudo chmod 644 /lib/systemd/system/oled_display.service
+sudo systemctl daemon-reload
+sudo systemctl enable oled_display.service
+sudo systemctl start oled_display.service
+
+3) You are done. Reboot the computer to check the display.
+
+0) Add the following commands in Terminal window in a row:
+sudo apt-get install libvlc-bin -y 
+sudo apt-get install vlc-plugin-qt -y 
+sudo apt-get purge libvlc-bin -y 
+sudo apt-get purge vlc-plugin-qt -y 
+sudo apt-get install vlc-plugin-qt -y 
+cd && rm raspi-blinka.py.1
+sudo reboot

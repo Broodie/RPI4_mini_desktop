@@ -1,0 +1,15 @@
+1) Go to your Menu -> Accessories -> SD Card Copier. This will open a simple window with a "from" and a "to" dropdown list. Select your SD card as the "from" target and your SSD as your "to" target. Then click on Start and Yes to continue. If your SSD is not seen by the OS then please do the step 0) below at first then redo this step 1).
+
+2) Open a Terminal window and enter the following command to make sure that you’ve got the latest boot loader. -> sudo rpi-eeprom-update -d -a
+	- if it says bootloader is up to date then you don't need to do anything
+	- if it says bootloader is not up to date then you need to update it with following command: sudo apt update && sudo apt full-upgrade && sudo rpi-update && sudo reboot
+Afterwards: sudo raspi-config -> Then go to "6 Advanced Options" and then "A7 Bootloader Version". Select the first option "E1 Latest Use the latest version boot ROM software" to use the latest software, then select Ok and then "No" so that it doesn’t revert to defaults. Next, go back to "6 Advanced Options" and select "A6 Boot Order". Select the second option B2 USB Boot Boot from USB if available, otherwise boot from SD card.
+You can then Finish and then select "No" when asked if you would like to reboot. Then rather shutdown your Pi.
+Once your Pi has shut down. Remove the power cable and then the SD card.
+
+0) sudo apt-get install gparted -> Go ahead and connect your SSD (via USB) to one of the Pi's USB 3.0 ports (the blue ones).
+Wait 30 seconds then go to your Menu -> System Tools -> GParted. Select 'GParted > Refresh Devices' from the top menu. This process takes a minute or two.
+Now your drop-down should show a new option (your new SSD). Select that option and wait for the information to display:
+Select 'Device > Create Partition Table' from the top menu: Keep the default settings, select 'Apply' and then leave it to do its thing for a few minutes.
+Select 'Partition > New' from the top menu: Keep all of the default settings as they are (including the ext4 filesystem), but add a sensible label to help you identify it later on - e.g. SSD
+Now select 'Edit > Apply All Operations' from the top menu and click yes to the warning once you've checked everything:
